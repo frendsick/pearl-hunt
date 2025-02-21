@@ -1,0 +1,104 @@
+include "std"
+
+// Configuration
+const FLAG_FILE "/root/flag.txt" end
+const PASSWORD "¯\_(ツ)_/¯" end
+
+// Ref: https://man7.org/linux/man-pages/man3/stat.3type.html
+// struct stat {
+//     dev_t      st_dev;      /* ID of device containing file */
+//     ino_t      st_ino;      /* Inode number */
+//     mode_t     st_mode;     /* File type and mode */
+//     nlink_t    st_nlink;    /* Number of hard links */
+//     uid_t      st_uid;      /* User ID of owner */
+//     gid_t      st_gid;      /* Group ID of owner */
+//     dev_t      st_rdev;     /* Device ID (if special file) */
+//     ...
+// }
+// Byte offset from `st_dev`
+const ST_RDEV_OFFSET 40 end
+
+function is_tty_attached -> bool :
+    ST_RDEV_OFFSET int.size + malloc
+    peek stat_buffer in stdin SYS_fstat syscall2 drop
+
+    // stat.st_rdev > 0
+    stat_buffer ST_RDEV_OFFSET ptr+ int.load 0 >
+end
+
+function is_argument_too_long string:str max_length:int -> bool :
+    0 take index in
+    while index string str.char_at NULL != do
+        if index max_length >= do
+            true return
+        endif
+        index 1 + index =
+    done
+
+    false
+end
+
+function is_command_line_argument_missing -> bool :
+    argv ptr.size ptr+  // &argv[1]
+    ptr.load NULLPTR == // points to NULLPTR
+end
+
+function parse_command_line_argument max_length:int -> str :
+    argv ptr.size ptr+ str.load // argv[1]
+    take cmd_arg in
+
+    // Do not allow too long arguments
+    if max_length cmd_arg is_argument_too_long do
+        "" return
+    endif
+
+    cmd_arg
+end
+
+function exit_with_error message:str :
+    message eputs
+    1 exit
+end
+
+// This function is meant to obfuscate the password away from the `main` function
+function get_password -> str :
+    PASSWORD
+end
+
+function main :
+    // Prevent running the program from a TTY, like bash
+    if is_tty_attached do
+        "TTYpical mistake!\n" exit_with_error
+    endif
+
+    // Demand password as command line argument
+    if is_command_line_argument_missing do
+        "I demand password\n" exit_with_error
+    endif
+
+    // Parse command line argument
+    get_password peek password in
+    str.len parse_command_line_argument take cmd_arg in
+
+    // Easter egg from Sheldon Cooper's quotes
+    1234 itoa take not_safe_password in
+    if cmd_arg not_safe_password streq do
+        f"{not_safe_password} is not a secure password\n" exit_with_error
+    endif
+
+    // Password is not correct
+    if cmd_arg password streq not do
+        "What's the password, you ask? Oh, I can't tell you that, it's top-secret.\n" exit_with_error
+    endif
+
+    // Read the flag
+    FLAG_FILE read_file
+    take flag in
+
+    // Congratulate the player
+    "\nWell, then it looks like we have a winner. Congratulations.\n" puts
+    "Please celebrate with free cold drinks from Loihde's counter!\n" puts
+
+    // Print the flag
+    flag puts
+end

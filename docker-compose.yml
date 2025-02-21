@@ -1,0 +1,17 @@
+services:
+  disobey-finale:
+    container_name: disobey-finale
+    hostname: shttycave
+    build:
+      context: .
+      secrets:
+        - ctf_flag
+        - ssh_password
+    ports:
+      - "42222:22"
+
+secrets:
+  ctf_flag:
+    file: docker_ctf_flag.txt
+  ssh_password:
+    file: docker_ssh_password.txt
