@@ -137,15 +137,15 @@ TTYpical mistake!
 The error message _TTYpical mistake!_ hints that shells nor any other TTYs cannot open the `unshellable` executable. The challenge requires figuring out a way how to run the executable without an attached TTY. One solution would be to run commands directly through SSH.
 
 ```
-$ ssh ctfuser@172.30.125.73 ./unshellable
-ctfuser@172.30.125.73's password:
+$ ssh shelldon@172.30.125.73 ./unshellable
+shelldon@172.30.125.73's password:
 I demand password
 ```
 
 Password demanded, huh? Let's give one!
 
 ```
-$ ssh ctfuser@172.30.125.73 ./unshellable password
+$ ssh shelldon@172.30.125.73 ./unshellable password
 shelldon@172.30.125.73's password:
 What's the password, you ask? Oh, I can't tell you that, it's top-secret.
 ```
