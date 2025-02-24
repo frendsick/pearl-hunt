@@ -231,7 +231,7 @@ The `get_password` function reads a static string from the `.data` section and p
 
 ![get_password function definition](./assets/finale_get_password_function.png)
 
-The string's contents can be found by listing the strings in data sections with the `iz` command. The string in the memory location `0x004030a6` refers to a UTF-8 string `¯\_(ツ)_/¯`, the _shrug_ emoticon. This could be the password.
+The string's contents can be found by listing the strings in data sections with the `iz` command. The string in the memory location `0x0040311b` refers to a UTF-8 string `¯\_(ツ)_/¯`, the _shrug_ emoticon. This could be the password.
 
 ```
 [0x00401000]> iz
