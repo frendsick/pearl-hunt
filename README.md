@@ -137,7 +137,7 @@ TTYpical mistake!
 The error message _TTYpical mistake!_ hints that shells nor any other TTYs cannot open the `unshellable` executable. The challenge requires figuring out a way how to run the executable without an attached TTY. One solution would be to run commands directly through SSH.
 
 ```
-$ ssh shelldon@172.30.125.73 ./unshellable
+$ ssh -p 42222 shelldon@172.30.125.73 ./unshellable
 shelldon@172.30.125.73's password:
 I demand password
 ```
@@ -145,7 +145,7 @@ I demand password
 Password demanded, huh? Let's give one!
 
 ```
-$ ssh shelldon@172.30.125.73 ./unshellable password
+$ ssh -p 42222 shelldon@172.30.125.73 ./unshellable password
 shelldon@172.30.125.73's password:
 What's the password, you ask? Oh, I can't tell you that, it's top-secret.
 ```
@@ -252,13 +252,13 @@ nth paddr      vaddr      len size section type  string
 As the emoticon contains some odd characters, at least Bash Shell interprets some characters non-literally. After some trial and error, we are able to run the binary with the literal _shrug_ emoticon as the password and get the flag. 
 
 ```
-$ ssh shelldon@172.30.125.73 ./unshellable ¯\_(ツ)_/¯
+$ ssh -p 42222 shelldon@172.30.125.73 ./unshellable ¯\_(ツ)_/¯
 -bash: syntax error near unexpected token `('
-$ ssh shelldon@172.30.125.73 './unshellable ¯\_(ツ)_/¯'
+$ ssh -p 42222 shelldon@172.30.125.73 './unshellable ¯\_(ツ)_/¯'
 shelldon@172.30.125.73's password:
 bash: -c: line 1: syntax error near unexpected token `('
 bash: -c: line 1: `./unshellable ¯\_(ツ)_/¯'
-$ ssh shelldon@172.30.125.73 './unshellable "¯\_(ツ)_/¯"'
+$ ssh -p 42222 shelldon@172.30.125.73 './unshellable "¯\_(ツ)_/¯"'
 shelldon@172.30.125.73's password:
 
 Well, then it looks like we have a winner. Congratulations.
@@ -352,7 +352,7 @@ Cannot open file '/root/flag.txt': Permission denied.
 Nice! We got permission denied from `/root/flag.txt`, which is the path we saw in the binary's strings! Now, just run the `unshellable` program on the CTF server over SSH using the password to get the flag.
 
 ```
-$ ssh shelldon@172.30.125.73 './unshellable "¯\_(ツ)_/¯"'
+$ ssh -p 42222 shelldon@172.30.125.73 './unshellable "¯\_(ツ)_/¯"'
 shelldon@172.30.125.73's password:
 
 Well, then it looks like we have a winner. Congratulations.
